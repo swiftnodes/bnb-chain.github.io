@@ -281,3 +281,7 @@
 - [BNB Beacon Chain Token Recovery Tool: Sunset Plan](https://docs.bnbchain.org/announce/token-recovery-sunset-plan/): Announcement of the token recovery tool sunset, with phased timelines and migration guidance.
 - [Veld Upgrade of Greenfield](https://docs.bnbchain.org/announce/veld-greenfield/): Hardfork announcement for Greenfield Veld, including upgrade timeline and required validator and storage provider versions.
 - [Wright Upgrade of opBNB](https://docs.bnbchain.org/announce/wright-opbnb/): Hardfork announcement for opBNB Wright, including upgrade timeline and gasless transaction support.
+- [Frequently Asked Questions](https://docs.bnbchain.org/faq/): Frequently asked questions for BNB Chain.
+- [BSC FAQs](https://docs.bnbchain.org/faq/bsc/): Frequently asked questions for BNB Smart Chain.
+- [BSC validator node fails to start with "Missing ancient data file" when using pruned PBSS snapshot](https://docs.bnbchain.org/faq/bsc-validator-node-fails-to-start-with-missing-ancient-data-file-when-using-prun/): Troubleshoot missing ancient data file errors when starting a BSC validator with a pruned PBSS snapshot.
+- [Refreshing Token Metadata on BscScan After Proxy Upgrade](https://docs.bnbchain.org/faq/refreshing-token-metadata-on-bscscan-after-proxy-upgrade/): Steps to refresh cached token metadata on BscScan after a proxy upgrade.
