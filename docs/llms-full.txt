@@ -1589,3 +1589,93 @@ To support gasless transactions on opBNB, the following features have been intro
 - When the gas price is set to 0, the L1 fee will also be set to 0.
 
 Combined with these features and a sponsor (paymaster), users can send transactions without holding BNB to pay gas fees.
+
+## Frequently Asked Questions
+> Source: https://docs.bnbchain.org/faq/
+
+# Frequently Asked Questions
+
+## BSC
+
+- [BSC validator node fails to start with "Missing ancient data file" when using pruned PBSS snapshot](./bsc-validator-node-fails-to-start-with-missing-ancient-data-file-when-using-prun.md)
+- [Refreshing Token Metadata on BscScan After Proxy Upgrade](./refreshing-token-metadata-on-bscscan-after-proxy-upgrade.md)
+
+## BSC FAQs
+> Source: https://docs.bnbchain.org/faq/bsc/
+
+# BSC FAQs
+
+- [BSC validator node fails to start with "Missing ancient data file" when using pruned PBSS snapshot](../bsc-validator-node-fails-to-start-with-missing-ancient-data-file-when-using-prun.md)
+- [Refreshing Token Metadata on BscScan After Proxy Upgrade](../refreshing-token-metadata-on-bscscan-after-proxy-upgrade.md)
+
+## BSC validator node fails to start with "Missing ancient data file" when using pruned PBSS snapshot - BSC FAQs
+> Source: https://docs.bnbchain.org/faq/bsc-validator-node-fails-to-start-with-missing-ancient-data-file-when-using-prun/
+
+### BSC validator node fails to start with "Missing ancient data file" when using pruned PBSS snapshot
+
+## Issue
+When starting a BSC node (such as a validator) after extracting a pruned PBSS (Path-Based Storage Scheme) snapshot, the process fails with an error indicating a missing ancient data file or an inability to locate the freezer directory.
+
+## Solution
+This issue typically occurs because the node cannot find the ancient block data or because the directory structure of the extracted snapshot does not match Geth's default expectations.
+
+### 1. Download All Required Files
+Pruned PBSS snapshots often come in multiple parts. Ensure you have downloaded both the main snapshot and the corresponding `pruneancient` file. If using the official `fetch-snapshot.sh` script, ensure it has completed successfully for all components.
+
+### 2. Explicitly Specify the Ancient Directory
+Use the `--datadir.ancient` flag to point Geth directly to the ancient data location. Note that newer versions of BSC Geth often expect a `chain` sub-directory within the `ancient` folder.
+
+**Example Startup Configuration:**
+```bash
+geth --config ./config.toml \
+  --datadir ./node \
+  --datadir.ancient ./node/geth/chaindata/ancient/chain \
+  --pruneancient=true \
+  --history.block 600000 \
+  ...
+```
+*Note: If your extracted `ancient` folder does not contain a `chain` sub-folder (i.e., data files are directly inside `ancient/`), point the path to `.../ancient`.*
+
+### 3. Required Parameters for Pruned Snapshots
+When using pruned snapshots, the following flags are critical:
+- `--pruneancient=true`: Enables the use of pruned ancient data.
+- `--history.block 600000`: For validators, it is recommended to retain approximately 3 days of block history (600,000 blocks) to ensure stability and avoid missing blocks during minor network fluctuations or switches.
+
+### 4. Verify Directory Structure
+Ensure that the path provided to `--datadir.ancient` contains the actual freezer data files. If the node fails to find them, verify that the extraction process completed without errors and that the files are not located in a different subdirectory.
+
+---
+
+Applies to: BSC Geth v1.7.2+
+
+## Refreshing Token Metadata on BscScan After Proxy Upgrade - BSC FAQs
+> Source: https://docs.bnbchain.org/faq/refreshing-token-metadata-on-bscscan-after-proxy-upgrade/
+
+### Refreshing Token Metadata on BscScan After Proxy Upgrade
+
+### Problem
+After upgrading a proxy contract's implementation, the BscScan Token Tracker (displaying the token name and symbol) might still show the metadata from the old implementation. This happens because BscScan often caches or "snapshots" token metadata when a contract is first identified.
+
+### Solution
+
+Follow these steps in order to refresh the metadata on BscScan (Mainnet or Testnet):
+
+1. **Re-verify the Proxy Link**
+   - Go to your proxy contract address on BscScan.
+   - Navigate to the **Contract** tab.
+   - Select **More Options** -> **Is this a proxy?**.
+   - Click **Verify** (even if it was already verified). This often triggers BscScan to re-sync the metadata from the implementation.
+
+2. **Verify the New Implementation Contract**
+   - Ensure the new implementation contract is verified with its source code on BscScan. If the implementation code isn't visible, BscScan may fail to correctly pull values for the proxy.
+
+3. **Check "Read as Proxy"**
+   - On the proxy contract page, go to **Contract** -> **Read as Proxy**.
+   - Verify if `name()` and `symbol()` return the updated values. If they do, the on-chain upgrade is successful, and the issue is purely BscScan's display cache.
+
+4. **Submit a Token Update Request**
+   - If the "Token Tracker" still shows the old metadata after a few hours despite the steps above, you must request a manual refresh.
+   - Use the BscScan [Token Update](https://bscscan.com/contactus) form (or the [Testnet Contact Us](https://testnet.bscscan.com/contactus) page).
+   - You will typically need to provide proof of ownership/authorization to update the token information in their database.
+
+**Note:** On Testnet, BscScan may be less responsive to manual update requests. Pointing users to the **"Read as Proxy"** tab is the best way to prove the upgrade worked on-chain.
